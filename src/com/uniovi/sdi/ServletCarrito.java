@@ -23,7 +23,6 @@ public class ServletCarrito extends HttpServlet {
 	 */
 	public ServletCarrito() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -36,7 +35,6 @@ public class ServletCarrito extends HttpServlet {
 		HttpSession session = request.getSession();
 		HashMap<String, Integer> carrito = (HashMap<String, Integer>) request.getSession().getAttribute("carrito");
 
-		
 		synchronized (session) {
 			// No hay carrito, creamos uno y lo insertamos en sesión
 			if (carrito == null) {
@@ -54,11 +52,10 @@ public class ServletCarrito extends HttpServlet {
 			out.println("<HEAD><TITLE>Tienda SDI: carrito</TITLE></HEAD>");
 			out.println("<BODY>");
 			out.println(carritoEnHTML(carrito) + "<br>");
-			out.println("<a href=\"tienda.html\">Volver</a></BODY></HTML>");
-		}		
-		
-		
-		
+			out.println("<a href=\"index.jsp\">Volver</a></BODY></HTML>");
+
+		}
+
 	}
 
 	private String carritoEnHTML(HashMap<String, Integer> carrito) {
