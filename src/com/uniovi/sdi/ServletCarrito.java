@@ -35,26 +35,28 @@ public class ServletCarrito extends HttpServlet {
 		HttpSession session = request.getSession();
 		HashMap<String, Integer> carrito = (HashMap<String, Integer>) request.getSession().getAttribute("carrito");
 
-		synchronized (session) {
-			// No hay carrito, creamos uno y lo insertamos en sesión
-			if (carrito == null) {
-				carrito = new HashMap<String, Integer>();
-				request.getSession().setAttribute("carrito", carrito);
-			}
-			String producto = request.getParameter("producto");
-			if (producto != null) {
+		// No hay carrito, creamos uno y lo insertamos en sesión
+		if (carrito == null) {
+			carrito = new HashMap<String, Integer>();
+			request.getSession().setAttribute("carrito", carrito);
+		}
+		
+		String producto = request.getParameter("producto");
+		if (producto != null) {
+			synchronized (session) {
 				insertarEnCarrito(carrito, producto);
 			}
-			response.setCharacterEncoding("UTF-8");
-			response.setContentType("text/html");
-			PrintWriter out = response.getWriter();
-			out.println("<HTML>");
-			out.println("<HEAD><TITLE>Tienda SDI: carrito</TITLE></HEAD>");
-			out.println("<BODY>");
-			out.println(carritoEnHTML(carrito) + "<br>");
-			out.println("<a href=\"index.jsp\">Volver</a></BODY></HTML>");
 
 		}
+
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		out.println("<HTML>");
+		out.println("<HEAD><TITLE>Tienda SDI: carrito</TITLE></HEAD>");
+		out.println("<BODY>");
+		out.println(carritoEnHTML(carrito) + "<br>");
+		out.println("<a href=\"index.jsp\">Volver</a></BODY></HTML>");
 
 	}
 
