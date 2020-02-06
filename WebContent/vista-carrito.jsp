@@ -15,18 +15,20 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-
 	<!-- Contenido -->
 	<div class="container" id="contenedor-principal">
 		<h2>Vista-Carrito</h2>
 		<ul>
 			<c:forEach var="par" items="${paresCarrito}">
-				<tr>
+				<tr>				
 					<li>${par.key}- ${par.value}</li>
+					<a
+						href="eliminarDelCarrito?productoNombre=<c:out value="${par.key}"/>"
+						class="btn btn-default"> <c:out value="Eliminar producto" />
+					</a>				
 				</tr>
 			</c:forEach>
 		</ul>
 	</div>
-
 </body>
 </html>

@@ -14,14 +14,14 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet implementation class ServletCarrito
  */
-@WebServlet("/incluirEnCarrito")
-public class ServletCarrito extends HttpServlet {
+@WebServlet("/eliminarDelCarrito")
+public class ServletEliminarDelCarrito extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ServletCarrito() {
+	public ServletEliminarDelCarrito() {
 		super();
 	}
 
@@ -29,31 +29,42 @@ public class ServletCarrito extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		HttpSession session = request.getSession();
+		String producto = request.getParameter("productoNombre");
 		HashMap<String, Integer> carrito = (HashMap<String, Integer>) request.getSession().getAttribute("carrito");
-		// No hay carrito, creamos uno y lo insertamos en sesión
-		if (carrito == null) {
-			carrito = new HashMap<String, Integer>();
-			request.getSession().setAttribute("carrito", carrito);
+
+		if (carrito != null) {
+			String producto2 = request.getParameter("producto");
+			if (producto != null) {
+				eliminarDelCarrito(carrito, producto);
+			}
+			request.setAttribute("paresCarrito", carrito);
+			getServletContext().getRequestDispatcher("/vista-carrito.jsp").forward(request, response);
 		}
 
-		String producto = request.getParameter("producto");
-		if (producto != null) {
-			insertarEnCarrito(carrito, producto);
-		}
-		request.setAttribute("paresCarrito", carrito);
-		getServletContext().getRequestDispatcher("/vista-carrito.jsp").forward(request, response);
 	}
-	private void insertarEnCarrito(HashMap<String, Integer> carrito, String producto) {
-		if (carrito.get(producto) == null) {
-			carrito.put(producto, new Integer(1));
-		} else {
-			int numeroArticulos = (Integer) carrito.get(producto).intValue();
-			carrito.put(producto, new Integer(numeroArticulos + 1));
 
+
+	private String carritoEnHTML(HashMap<String, Integer> carrito) {
+		String carritoEnHTML = "";
+
+		for (String key : carrito.keySet()) {
+			carritoEnHTML += "<p>[" + key + "], " + carrito.get(key) + " unidades</p>";
+		}
+
+		return carritoEnHTML;
+	}
+
+	
+	
+	private void eliminarDelCarrito(HashMap<String, Integer> carrito, String producto) {
+
+		if (carrito.get(producto) != null) {
+			carrito.remove(producto);
 		}
 	}
 
